@@ -18,7 +18,7 @@ docker build -t devops-app:test .
 docker run -d --name test-container -p 8081:80 devops-app:test
 sleep 5
 
-HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8081)
+HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://172.31.21.35:8081)
 
 docker stop test-container
 docker rm test-container
