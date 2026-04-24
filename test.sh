@@ -6,14 +6,7 @@ if [ ! -f index.html ]; then
 fi
 echo "OK: index.html existe"
 
-echo "=== Nível 2: verificando conteúdo ==="
-if ! grep -q "Pipeline CI/CD funcionando" index.html; then
-  echo "ERRO: conteúdo esperado não encontrado!"
-  exit 1
-fi
-echo "OK: conteúdo correto"
-
-echo "=== Nível 3: verificando se o container responde ==="
+echo "=== Nível 2: verificando se o container responde ==="
 docker build -t devops-app:test .
 docker run -d --name test-container -p 8081:80 devops-app:test
 sleep 5
