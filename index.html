@@ -1,9 +1,428 @@
 <!DOCTYPE html>
-<html>
-<head><title>DevOps Project</title></head>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eric Dias Lemos — DevOps & Observabilidade</title>
+<meta name="description" content="DevOps Engineer especializado em observabilidade, CI/CD e automação. Prometheus, Grafana, Docker, Kubernetes, Jenkins, GCP, AWS.">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e13;
+    --surface: #111820;
+    --surface2: #1a2330;
+    --border: #1e2d3d;
+    --accent: #00d4ff;
+    --accent2: #00ff9d;
+    --accent3: #ff6b35;
+    --text: #e2eaf4;
+    --muted: #6b8299;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { max-width: 860px; margin: 0 auto; padding: 60px 32px 80px; position: relative; z-index: 1; }
+
+  /* HEADER */
+  .header { border-left: 2px solid var(--accent); padding-left: 24px; margin-bottom: 56px; animation: fadeUp 0.6s ease both; }
+  .prompt { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: 0.1em; margin-bottom: 12px; opacity: 0.7; }
+  .prompt::before { content: '> '; }
+  h1 { font-family: var(--mono); font-size: clamp(28px, 5vw, 42px); font-weight: 600; color: var(--text); line-height: 1.1; letter-spacing: -0.02em; }
+  .role { font-family: var(--mono); font-size: clamp(13px, 2vw, 16px); color: var(--accent); margin-top: 10px; font-weight: 400; }
+  .tagline { font-size: 15px; color: var(--muted); margin-top: 16px; font-style: italic; max-width: 520px; }
+
+  .contacts { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 20px; }
+  .contact-item { font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: 6px; transition: color 0.2s; }
+  .contact-item:hover { color: var(--accent); }
+  .contact-item .dot { width: 4px; height: 4px; background: var(--accent); border-radius: 50%; }
+
+  /* METRICS */
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 48px; animation: fadeUp 0.6s 0.1s ease both; opacity: 0; }
+  .metric { background: var(--surface); border: 1px solid var(--border); padding: 16px; text-align: center; border-radius: 2px; }
+  .metric-val { font-family: var(--mono); font-size: 26px; font-weight: 600; color: var(--accent); }
+  .metric-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* SECTIONS */
+  .section { margin-bottom: 48px; animation: fadeUp 0.6s ease both; opacity: 0; }
+  .section:nth-child(3) { animation-delay: 0.15s; }
+  .section:nth-child(4) { animation-delay: 0.2s; }
+  .section:nth-child(5) { animation-delay: 0.25s; }
+  .section:nth-child(6) { animation-delay: 0.3s; }
+  .section:nth-child(7) { animation-delay: 0.35s; }
+  .section:nth-child(8) { animation-delay: 0.4s; }
+
+  .section-label { font-family: var(--mono); font-size: 11px; color: var(--accent2); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
+
+  /* ABOUT */
+  .about-text { font-size: 15px; color: #a8bdd0; line-height: 1.8; border-left: 1px solid var(--border); padding-left: 20px; }
+  .highlight { color: var(--accent); font-weight: 400; }
+
+  /* STACK */
+  .stack-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { font-family: var(--mono); font-size: 12px; padding: 5px 12px; border: 1px solid var(--border); border-radius: 2px; color: var(--muted); background: var(--surface); transition: all 0.2s; cursor: default; }
+  .tag:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,212,255,0.05); }
+  .tag.core { border-color: rgba(0,212,255,0.3); color: var(--accent); background: rgba(0,212,255,0.06); }
+  .tag.new { border-color: rgba(0,255,157,0.3); color: var(--accent2); background: rgba(0,255,157,0.06); }
+
+  /* EXPERIENCE */
+  .exp-item { display: grid; grid-template-columns: 160px 1fr; gap: 20px; margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid var(--border); }
+  .exp-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .exp-date { font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 1.4; }
+  .exp-company { font-family: var(--mono); font-size: 11px; color: var(--accent3); margin-top: 4px; }
+  .exp-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 8px; }
+  .exp-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .exp-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .exp-tag { font-family: var(--mono); font-size: 10px; color: var(--accent2); background: rgba(0,255,157,0.06); border: 1px solid rgba(0,255,157,0.15); padding: 2px 8px; border-radius: 2px; }
+
+  /* PROJECTS */
+  .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .project-card { background: var(--surface); border: 1px solid var(--border); padding: 20px; border-radius: 2px; transition: all 0.25s; position: relative; overflow: hidden; }
+  .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transform: scaleX(0); transition: transform 0.3s; transform-origin: left; }
+  .project-card:hover { border-color: rgba(0,212,255,0.3); background: var(--surface2); }
+  .project-card:hover::before { transform: scaleX(1); }
+  .project-card.featured { border-color: rgba(0,255,157,0.2); grid-column: 1 / -1; }
+  .project-card.featured::before { background: linear-gradient(90deg, var(--accent2), var(--accent)); }
+  .project-badge { font-family: var(--mono); font-size: 10px; color: var(--accent2); background: rgba(0,255,157,0.1); border: 1px solid rgba(0,255,157,0.2); padding: 2px 8px; border-radius: 2px; display: inline-block; margin-bottom: 10px; }
+  .project-name { font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .project-desc { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+  .project-link { font-family: var(--mono); font-size: 11px; color: var(--accent); text-decoration: none; opacity: 0.7; transition: opacity 0.2s; }
+  .project-link:hover { opacity: 1; }
+
+  /* PIPELINE VISUAL */
+  .pipeline { display: flex; align-items: center; gap: 0; margin: 12px 0; flex-wrap: wrap; }
+  .pipe-step { font-family: var(--mono); font-size: 10px; color: var(--accent2); background: rgba(0,255,157,0.06); border: 1px solid rgba(0,255,157,0.15); padding: 4px 10px; border-radius: 2px; white-space: nowrap; }
+  .pipe-arrow { font-family: var(--mono); font-size: 11px; color: var(--muted); padding: 0 4px; }
+
+  /* CERTS */
+  .cert-list { display: flex; flex-direction: column; gap: 10px; }
+  .cert-item { display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 2px; }
+  .cert-icon { width: 32px; height: 32px; background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2); border-radius: 2px; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 10px; color: var(--accent); flex-shrink: 0; }
+  .cert-name { font-size: 13px; color: var(--text); font-weight: 400; }
+  .cert-issuer { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* TERMINAL */
+  .terminal { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 48px; }
+  .terminal-bar { background: var(--surface2); padding: 8px 14px; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid var(--border); }
+  .t-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .t-red { background: #ff5f57; }
+  .t-yellow { background: #febc2e; }
+  .t-green { background: #28c840; }
+  .terminal-title { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-left: 8px; }
+  .terminal-body { padding: 16px 20px; min-height: 120px; }
+  .t-line { font-family: var(--mono); font-size: 13px; line-height: 1.8; }
+  .t-prompt { color: var(--accent2); }
+  .t-cmd { color: var(--text); }
+  .t-out { color: var(--muted); }
+  .t-val { color: var(--accent); }
+  .t-input { background: transparent; border: none; outline: none; font-family: var(--mono); font-size: 13px; color: var(--text); width: 200px; caret-color: var(--accent); }
+
+  /* FOOTER */
+  .footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .footer-text { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .status { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; color: var(--accent2); }
+  .status-dot { width: 6px; height: 6px; background: var(--accent2); border-radius: 50%; animation: pulse 2s infinite; }
+
+  @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+  .cursor { display: inline-block; width: 8px; height: 14px; background: var(--accent); animation: blink 1s infinite; vertical-align: middle; margin-left: 2px; }
+
+  @media (max-width: 600px) {
+    .exp-item { grid-template-columns: 1fr; gap: 8px; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .container { padding: 40px 20px 60px; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .pipeline { gap: 4px; }
+  }
+</style>
+</head>
 <body>
-  <h1>Pipeline CI/CD funcionando!</h1>
-  <p>Deploy automático via GitHub + Jenkins + Docker + K3s</p>
-  <p>Versão 2.0 — triggered by git push!</p>
+<div class="container">
+
+  <!-- HEADER -->
+  <header class="header">
+    <p class="prompt">whoami</p>
+    <h1>Eric Dias Lemos</h1>
+    <p class="role">DevOps Engineer & Observability</p>
+    <p class="tagline">Transformo alertas em insights e processos manuais em automações.</p>
+    <div class="contacts">
+      <span class="contact-item"><span class="dot"></span>Contagem, MG — Brasil</span>
+      <a href="https://linkedin.com/in/eric-dias-lemos" class="contact-item" target="_blank"><span class="dot"></span>linkedin.com/in/eric-dias-lemos</a>
+      <a href="https://github.com/EricDiasLemos" class="contact-item" target="_blank"><span class="dot"></span>github.com/EricDiasLemos</a>
+    </div>
+  </header>
+
+  <!-- METRICS -->
+  <div class="metrics">
+    <div class="metric"><div class="metric-val" data-target="552">0</div><div class="metric-label">Conexões LinkedIn</div></div>
+    <div class="metric"><div class="metric-val" data-target="3">0</div><div class="metric-label">Projetos Open Source</div></div>
+    <div class="metric"><div class="metric-val" data-target="3">0</div><div class="metric-label">Certificações</div></div>
+    <div class="metric"><div class="metric-val" data-target="2">0</div><div class="metric-label">Anos em DevOps</div></div>
+  </div>
+
+  <!-- TERMINAL -->
+  <div class="terminal">
+    <div class="terminal-bar">
+      <div class="t-dot t-red"></div>
+      <div class="t-dot t-yellow"></div>
+      <div class="t-dot t-green"></div>
+      <span class="terminal-title">eric@devops ~ bash</span>
+    </div>
+    <div class="terminal-body" id="termBody">
+      <div class="t-line"><span class="t-prompt">eric@devops</span><span class="t-cmd"> ~$</span> <span id="typingCmd"></span><span class="cursor" id="cursor"></span></div>
+      <div id="termOutput"></div>
+    </div>
+  </div>
+
+  <!-- SOBRE -->
+  <section class="section">
+    <p class="section-label">sobre</p>
+    <p class="about-text">
+      Atuo na interseção entre <span class="highlight">infraestrutura, redes e desenvolvimento</span> — construindo pipelines CI/CD com Jenkins e Kubernetes, stacks de observabilidade com Prometheus, Grafana e LOKI, automatizando operações com Python e containerizando serviços com Docker em ambientes críticos de produção.<br><br>
+      Minha trajetória começou no NOC monitorando redes de telecom. Hoje desenho soluções ponta a ponta: da coleta de métricas ao dashboard em tempo real, do webhook ao deploy automático com zero downtime. Estudante de Engenharia da Computação no Centro Universitário UNA (conclusão 2026).
+    </p>
+  </section>
+
+  <!-- STACK -->
+  <section class="section">
+    <p class="section-label">stack</p>
+    <div class="stack-grid">
+      <span class="tag core">Python</span>
+      <span class="tag core">Docker</span>
+      <span class="tag core">Prometheus</span>
+      <span class="tag core">Grafana</span>
+      <span class="tag core">Linux</span>
+      <span class="tag core">Zabbix</span>
+      <span class="tag new">Jenkins</span>
+      <span class="tag new">Kubernetes (K3s)</span>
+      <span class="tag new">AWS EC2</span>
+      <span class="tag">LOKI</span>
+      <span class="tag">Docker Compose</span>
+      <span class="tag">GCP</span>
+      <span class="tag">Nginx</span>
+      <span class="tag">MySQL</span>
+      <span class="tag">APIs REST</span>
+      <span class="tag">GitHub Actions</span>
+      <span class="tag">Node.js</span>
+    </div>
+  </section>
+
+  <!-- EXPERIÊNCIA -->
+  <section class="section">
+    <p class="section-label">experiência</p>
+
+    <div class="exp-item">
+      <div>
+        <p class="exp-date">Mar 2025<br>Presente</p>
+        <p class="exp-company">Método Telecom</p>
+      </div>
+      <div>
+        <p class="exp-title">Analista de Telecom & DevOps</p>
+        <p class="exp-desc">Implantação e operação de stack completa de observabilidade (Prometheus + Grafana + LOKI + Zabbix) em ambiente crítico. Desenvolvimento de aplicações Python para automação de métricas, integração via APIs REST e containerização de serviços com Docker. Infraestrutura em GCP e AWS com foco em alta disponibilidade.</p>
+        <div class="exp-tags">
+          <span class="exp-tag">Prometheus</span><span class="exp-tag">Grafana</span><span class="exp-tag">Docker</span><span class="exp-tag">Python</span><span class="exp-tag">GCP</span><span class="exp-tag">Linux</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div>
+        <p class="exp-date">Set 2024<br>Mar 2025</p>
+        <p class="exp-company">Century Telecom</p>
+      </div>
+      <div>
+        <p class="exp-title">Analista de Redes Junior</p>
+        <p class="exp-desc">Análise de circuitos por VLANs, troubleshooting de rede, configuração de equipamentos de borda e atendimento a clientes para validação de circuitos.</p>
+        <div class="exp-tags"><span class="exp-tag">Redes</span><span class="exp-tag">VLANs</span><span class="exp-tag">Troubleshooting</span></div>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div>
+        <p class="exp-date">Abr 2024<br>Ago 2024</p>
+        <p class="exp-company">Kater Telecom</p>
+      </div>
+      <div>
+        <p class="exp-title">Assistente de NOC</p>
+        <p class="exp-desc">Monitoramento de infraestrutura com Zabbix e Grafana, diagnóstico de incidentes e suporte a equipamentos MikroTik, RB, OLT e Huawei.</p>
+        <div class="exp-tags"><span class="exp-tag">Zabbix</span><span class="exp-tag">Grafana</span><span class="exp-tag">NOC</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJETOS -->
+  <section class="section">
+    <p class="section-label">projetos open source</p>
+    <div class="projects-grid">
+
+      <div class="project-card featured">
+        <span class="project-badge">★ destaque</span>
+        <p class="project-name">DevOps Pipeline — Jenkins + Docker + Kubernetes</p>
+        <div class="pipeline">
+          <span class="pipe-step">git push</span><span class="pipe-arrow">→</span>
+          <span class="pipe-step">webhook</span><span class="pipe-arrow">→</span>
+          <span class="pipe-step">Jenkins</span><span class="pipe-arrow">→</span>
+          <span class="pipe-step">3x testes</span><span class="pipe-arrow">→</span>
+          <span class="pipe-step">Docker build</span><span class="pipe-arrow">→</span>
+          <span class="pipe-step">K3s deploy</span><span class="pipe-arrow">→</span>
+          <span class="pipe-step">✅ live</span>
+        </div>
+        <p class="project-desc" style="margin-top:10px;">Pipeline completo em EC2 AWS com Jenkins em container Docker, K3s orquestrando 2 réplicas com self-healing e rollback automático por falha nos testes. Zero downtime.</p>
+        <div class="exp-tags" style="margin-bottom:12px;">
+          <span class="exp-tag">Jenkins</span><span class="exp-tag">K3s</span><span class="exp-tag">Docker</span><span class="exp-tag">AWS EC2</span><span class="exp-tag">Kubernetes</span>
+        </div>
+        <a href="https://github.com/EricDiasLemos/DevOps" class="project-link" target="_blank">→ github.com/EricDiasLemos/DevOps</a>
+      </div>
+
+      <div class="project-card">
+        <p class="project-name">NetPulse</p>
+        <p class="project-desc">Visualizador interativo de topologia de rede integrado ao Zabbix. Coleta hosts, métricas e alertas via Zabbix API e renderiza mapa em tempo real via SSE.</p>
+        <div class="exp-tags" style="margin-bottom:12px;"><span class="exp-tag">Node.js</span><span class="exp-tag">Docker</span><span class="exp-tag">Nginx</span><span class="exp-tag">Zabbix API</span></div>
+        <a href="https://github.com/EricDiasLemos/topology-redes-zabbix" class="project-link" target="_blank">→ github.com/EricDiasLemos</a>
+      </div>
+
+      <div class="project-card">
+        <p class="project-name">CI/CD Blue-Green Pipeline</p>
+        <p class="project-desc">Pipeline com zero downtime para CRM próprio. GitHub Actions → build/testes → Blue-Green Deployment em GCP via Docker + Nginx. Rollback automático por health check.</p>
+        <div class="exp-tags" style="margin-bottom:12px;"><span class="exp-tag">GitHub Actions</span><span class="exp-tag">Docker</span><span class="exp-tag">GCP</span><span class="exp-tag">Next.js</span></div>
+        <a href="https://github.com/EricDiasLemos" class="project-link" target="_blank">→ github.com/EricDiasLemos</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CERTIFICAÇÕES -->
+  <section class="section">
+    <p class="section-label">certificações</p>
+    <div class="cert-list">
+      <div class="cert-item">
+        <div class="cert-icon">GCP</div>
+        <div><p class="cert-name">DevOps Essentials</p><p class="cert-issuer">Google Cloud · Mar 2026</p></div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">SRE</div>
+        <div><p class="cert-name">Developing a Google SRE Culture</p><p class="cert-issuer">Google Cloud · Mar 2026</p></div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">GWS</div>
+        <div><p class="cert-name">Google Workspace Deployment Services</p><p class="cert-issuer">Google · Out 2025 · válido até Out 2027</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p class="footer-text">eric_dias_lemos · Contagem, MG · 2026</p>
+    <div class="status"><span class="status-dot"></span>aberto a oportunidades</div>
+  </footer>
+
+</div>
+
+<script>
+  // Animated counters
+  const counters = document.querySelectorAll('[data-target]');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.target);
+        const duration = target > 100 ? 1500 : 800;
+        const step = target / (duration / 16);
+        let current = 0;
+        const timer = setInterval(() => {
+          current += step;
+          if (current >= target) { el.textContent = target; clearInterval(timer); }
+          else el.textContent = Math.floor(current);
+        }, 16);
+        observer.unobserve(el);
+      }
+    });
+  });
+  counters.forEach(c => observer.observe(c));
+
+  // Terminal typing effect
+  const commands = [
+    { cmd: "cat about.txt", output: [
+      '<span class="t-out">NOC → DevOps Engineer</span>',
+      '<span class="t-out">Observabilidade · CI/CD · Automação · Containers</span>',
+    ]},
+    { cmd: "kubectl get pods", output: [
+      '<span class="t-out">NAME                    READY   STATUS    RESTARTS</span>',
+      '<span class="t-val">devops-pipeline-k8s     2/2     Running   0</span>',
+      '<span class="t-val">netpulse-zabbix         1/1     Running   0</span>',
+      '<span class="t-val">blue-green-cicd         2/2     Running   0</span>',
+    ]},
+    { cmd: "echo $STACK", output: [
+      '<span class="t-val">Python Docker Jenkins K3s Prometheus Grafana LOKI Zabbix GCP AWS</span>',
+    ]},
+  ];
+
+  let cmdIdx = 0;
+  let charIdx = 0;
+  let outputIdx = 0;
+  let phase = 'typing';
+  const typingEl = document.getElementById('typingCmd');
+  const outputEl = document.getElementById('termOutput');
+
+  function runTerminal() {
+    const current = commands[cmdIdx % commands.length];
+    if (phase === 'typing') {
+      if (charIdx < current.cmd.length) {
+        typingEl.textContent += current.cmd[charIdx++];
+        setTimeout(runTerminal, 60);
+      } else {
+        phase = 'output';
+        outputIdx = 0;
+        setTimeout(runTerminal, 300);
+      }
+    } else if (phase === 'output') {
+      if (outputIdx < current.output.length) {
+        const line = document.createElement('div');
+        line.className = 't-line';
+        line.innerHTML = current.output[outputIdx++];
+        outputEl.appendChild(line);
+        setTimeout(runTerminal, 150);
+      } else {
+        phase = 'pause';
+        setTimeout(runTerminal, 2500);
+      }
+    } else if (phase === 'pause') {
+      // clear and next
+      typingEl.textContent = '';
+      outputEl.innerHTML = '';
+      charIdx = 0;
+      cmdIdx++;
+      phase = 'typing';
+      setTimeout(runTerminal, 400);
+    }
+  }
+
+  setTimeout(runTerminal, 800);
+</script>
 </body>
 </html>
