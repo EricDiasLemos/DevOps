@@ -3,7 +3,12 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        echo 'Código pronto!'
+        echo 'Código obtido do GitHub!'
+      }
+    }
+    stage('Testes') {
+      steps {
+        sh 'cd /home/ubuntu/devops-project && bash test.sh'
       }
     }
     stage('Build Image') {
@@ -24,10 +29,10 @@ pipeline {
   }
   post {
     success {
-      echo 'Deploy realizado com sucesso!'
+      echo 'Deploy realizado com sucesso! ✅'
     }
     failure {
-      echo 'Algo deu errado!'
+      echo 'Pipeline falhou! Deploy cancelado. ❌'
     }
   }
 }
